@@ -1,0 +1,101 @@
+- hosts: teamserver
+  remote_user: root
+  vars:
+    hub_source: "https://download.jetbrains.com/hub/2017.4/hub-ring-bundle-2017.4.8117.zip"
+    teamcity_source: "https://download.jetbrains.com/teamcity/TeamCity-2017.2.1.tar.gz"
+    youtrack_source: "https://download.jetbrains.com/charisma/youtrack-2017.4.38030.zip"
+    upsource_source: "https://download.jetbrains.com/upsource/upsource-2017.3.2593.zip"
+  tasks:
+  - name: Preform a safe upgrade
+    apt: upgrade="yes"
+  - name: Preform an apt update
+    apt: update_cache="yes"
+  - name: Ensure Java is installed
+    apt: name="default-jdk" state="latest"
+  - name: Ensure Python is installed
+    apt: name="python-pip" state="latest"
+  - name: Ensure Docker is installed
+    apt: name="docker" state="latest"
+  - name: Ensure Apache2 is installed
+    apt: name="apache2" state="latest"
+  - name: Ensure Git is installed
+    apt: name="git" state="latest"
+  - name: Ensure screen is installed
+    apt: name="screen" state="latest"
+
+
+  - name: Create team-tools directory
+    file: path="/home/team-tools" state="directory"
+  - name: Create sub directories
+    file: path="/home/team-tools/data" state="directory"
+  - name: Create sub directories
+    file: path="/home/team-tools/log" state="directory"
+  - name: Create sub directories
+    file: path="/home/team-tools/data/hub" state="directory"
+  - name: Create sub directories
+    file: path="/home/team-tools/log/hub" state="directory"
+  - name: Create sub directories
+    file: path="/home/team-tools/data/teamcity" state="directory"
+  - name: Create sub directories
+    file: path="/home/team-tools/log/teamcity" state="directory"
+  - name: Create sub directories
+    file: path="/home/team-tools/data/youtrack" state="directory"
+  - name: Create sub directories
+    file: path="/home/team-tools/log/youtrack" state="directory"
+  - name: Create sub directories
+    file: path="/home/team-tools/data/upsource" state="directory"
+  - name: Create sub directories
+    file: path="/home/team-tools/log/upsource" state="directory"
+  - name: Create sub directories
+    file: path="/home/team-tools/hub" state="directory"
+  - name: Create sub directories
+    file: path="/home/team-tools/teamcity" state="directory"
+  - name: Create sub directories
+    file: path="/home/team-tools/youtrack" state="directory"
+  - name: Create sub directories
+    file: path="/home/team-tools/upsource" state="directory"
+
+  - name: Retrieve Hub source
+    get_url:
+      url: "{{hub_source}}"
+      dest: /home/team-tools/hub/
+      
+  - name: Retrieve Teamcity source
+    get_url:
+      url: "{{teamcity_source}}"
+      dest: /home/team-tools/teamcity/
+
+  - name: Retrieve YouTrack source
+    get_url:
+      url: "{{youtrack_source}}"
+      dest: /home/team-tools/youtrack/
+
+  - name: Retrieve UpSource source
+    get_url:
+      url: "{{upsource_source}}"
+      dest: /home/team-tools/upsource/
+
+  - name: Unzip Hub
+    unarchive:
+      src: /home/team-tools/hub/hub-ring-bundle-2017.4.8117.zip
+      dest: /home/team-tools/hub/
+      remote_src: yes
+
+  - name: Unzip TeamCity
+    unarchive:
+      src: /home/team-tools/teamcity/TeamCity-2017.2.1.tar.gz
+      dest: /home/team-tools/teamcity
+      remote_src: yes
+
+  - name: Unzip YouTrack
+    unarchive:
+      src: /home/team-tools/youtrack/youtrack-2017.4.38030.zip
+      dest: /home/team-tools/youtrack
+      remote_src: yes
+
+
+  - name: Unzip Upsource
+    unarchive:
+      src: /home/team-tools/upsource/upsource-2017.3.2593.zip
+      dest: /home/team-tools/upsource
+      remote_src: yes
