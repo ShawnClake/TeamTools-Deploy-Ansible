@@ -1,2 +1,2 @@
 #!/bin/bash
-ansible-playbook playbooks/prepare.yml -i inventory -c local
+ansible-playbook playbooks/prepare.yaml -i inventory -c local
